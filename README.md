@@ -80,6 +80,8 @@ All methods accepts as params objects just like requested on documentation and
 responses are resolved as they come. Its your job to send proper information and
 manipulate the response.
 
+| Method | Params | Returns | Description |
+| --- | --- | --- | --- |
 | getTICs | - | Promise:Array of Ids | Returns all available TICs |
 | getTICsGroups | - | Promise:Array of Groups | Returns all available TIC Groups |
 | getTICsByGroup | ticId:int | Promise:Array of Ids | Returns all available TICs for a Given group |
