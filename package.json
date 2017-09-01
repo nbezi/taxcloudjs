@@ -1,0 +1,28 @@
+{
+  "name": "taxcloudjs",
+  "version": "0.0.1",
+  "description": "TaxCloud Wrapper",
+  "main": "taxcloud.js",
+  "engines": {
+    "node": ">=6.11"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbezi/taxcloudjs.git"
+  },
+  "keywords": [
+    "taxcloud"
+  ],
+  "author": "Norberto Bezi <norberto.bezi@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nbezi/taxcloudjs/issues"
+  },
+  "homepage": "https://github.com/nbezi/taxcloudjs#readme",
+  "dependencies": {
+    "node-fetch": "^1.7.2"
+  }
+}
