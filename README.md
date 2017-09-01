@@ -12,6 +12,11 @@ Why this module:
 
 If you think you can contribute, please do. Looking for co-maintainers.
 
+## Install
+
+```bash
+$ npm install taxcloudjs
+```
 
 ## Setting up
 By default, the following environmet variables will be used if present:
@@ -70,7 +75,7 @@ Methods will receive and return what TaxCloud is expecting as JSON. Read
 [TaxCloud documentation](https://taxcloud.net/developerguide.pdf) to learn more.
 
 All important methods to operate with TaxCloud returns a Promise that will give
-you the Object returned by the API or a error you can catch and receive the API
+you the Object returned by the API or an error to be catched with API
 Error code and messages depending on the method called, such as
 `[{"ResponseType":0,"Message":"Invalid apiLoginID and/or apiKey"}]`.
 
