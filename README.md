@@ -32,7 +32,7 @@ Example:
 var props = {
   apiLoginId: 'xxxxxxxxxx', // Required
   apiKey: 'xxxxxxxxxxxxxx', // Required
-  USPSUserId: 'xxxxxxxxxx'  // Optional - for address validation
+  USPSUserId: 'xxxxxxxxxx'  // Optional - for address validation only
 }
 
 // using constructor
@@ -44,16 +44,15 @@ var taxcloudjs = require('taxcloudjs').initialize(props);
 
 ```
 
-Those properties are required and Errors will be thrown at construction time.
-
 ### Optional Properties
 
-* maxCartSize: int - default 100, carefully read TaxCloud documentation before changing this.
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| maxCartSize | int | 100 | Maximun number of Items in a Cart. read [TaxCloud documentation](https://taxcloud.net/developerguide.pdf) before changing this. |
 
 ## Ping
 
 ```javascript
-// I'm using the short initialization here ...
 var taxcloudjs = require('taxcloudjs').initialize();
 
 taxcloudjs.ping()
@@ -64,3 +63,31 @@ taxcloudjs.ping()
   // Handle it ...
 })
 ```
+
+## More methods
+
+Methods will receive and return what TaxCloud is expecting as JSON. Read
+[TaxCloud documentation](https://taxcloud.net/developerguide.pdf) to learn more.
+
+All important methods to operate with TaxCloud returns a Promise that will give
+you the Object returned by the API or a error you can catch and receive the API
+Error code and messages depending on the method called, such as
+`[{"ResponseType":0,"Message":"Invalid apiLoginID and/or apiKey"}]`.
+
+This implementation uses TaxCloud API as is, all validation, except some basic
+validation done on lookup, are performed on their end and returned as errors.
+All methods accepts as params objects just like requested on documentation and
+responses are resolved as they come. Its your job to send proper information and
+manipulate the response.
+
+| getTICs | - | Promise:Array of Ids | Returns all available TICs |
+| getTICsGroups | - | Promise:Array of Groups | Returns all available TIC Groups |
+| getTICsByGroup | ticId:int | Promise:Array of Ids | Returns all available TICs for a Given group |
+| updateTICIdList | - | Promise | Updates the internal TICs cache |
+| isTic | ticId:int | boolean | Whether or not a given ID is in the TICs cache |
+| verifyAddress | cart:Object | Promise:Object | See TaxCloud docs |
+| lookup | cart:Object | Promise:Object | See TaxCloud docs |
+| authorized | transaction:Object | Promise:Object | See TaxCloud docs |
+| capture | transaction:Object | Promise:Object | See TaxCloud docs |
+| authorizedWithCapture | transaction:Object | Promise:Object | See TaxCloud docs |
+| returned | transaction:Object | Promise:Object | See TaxCloud docs |

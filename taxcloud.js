@@ -35,11 +35,10 @@ class TaxCloud {
   }
 
   updateTICIdList() {
-    this.getTICs().then((res) => {
+    return this.getTICs().then((res) => {
       this._tics = res.TICs.map((tic) => tic.TICID)
       .sort((a, b) => a - b);
-    })
-    .catch((err) => console.warn('TaxCloud: unable to update TIC List'));
+    });
   }
 
   getTICsGroups() {
@@ -54,10 +53,19 @@ class TaxCloud {
     return this._tics.indexOf(tic) !== -1;
   }
 
+  verifyAddress(data) {
+    if (!this.USPSUserId) {
+      return new Promise((rs, rj) => rj('USPSUserId required to varifyAddress'));
+    }
+    data.apiLoginID = this.apiLoginId;
+    data.apiKey = this.apiKey;
+    return this._post('VerifyAddress', data);
+  }
+
   lookup(cart) {
     return new Promise((resolve, reject) => {
-      if (!isString(cart.cartID)) cart.cartID = null;
-      if (!isString(cart.customerID)) cart.customerID = null;
+      if (!this._isString(cart.cartID)) cart.cartID = null;
+      if (!this._isString(cart.customerID)) cart.customerID = null;
 
       /* Very basic validation, the endpoint will validate, please check TaxCloud Docs */
       if (!(cart.cartItems instanceof Array)) {
@@ -66,12 +74,12 @@ class TaxCloud {
         reject('cart.cartItems is empty')
       } else if (cart.cartItems.length > this.maxCartSize) {
         reject(`cart.cartItems is greater than ${this.maxCartSize}`)
-      } else if (!(cart.origin instanceof Object) || !isAddress(cart.origin)) {
+      } else if (!(cart.origin instanceof Object) || !this._isAddress(cart.origin)) {
         reject('cart.origin not an address object')
-      } else if (!(cart.destination instanceof Object) || !isAddress(cart.destination)) {
+      } else if (!(cart.destination instanceof Object) || !this._isAddress(cart.destination)) {
         reject('cart.destination not an address object')
       } else if (cart.cartItems.every((item) => {
-        if (!isString(item.TIC) || !this.isTic(item.TIC)) return false;
+        if (!this._isString(item.TIC) || !this.isTic(item.TIC)) return false;
         item.Price = parseFloat(item.Price);
         item.Qty = parseInt(item.Qty);
         if (item.Qty < 1) return false;
@@ -108,9 +116,14 @@ class TaxCloud {
     return this._post('AuthorizedWithCapture', data);
   }
 
+  returned(data) {
+    data.apiLoginID = this.apiLoginId;
+    data.apiKey = this.apiKey;
+    return this._post('Returned', data);
+  }
+
   _post(method, data) {
     var body = JSON.stringify(data);
-    console.log(body);
     return fetch(apiUrl + method, {
       method: 'POST',
       body: body,
@@ -125,21 +138,23 @@ class TaxCloud {
       return res;
     });
   }
-}
 
-var isString = (str) => str && typeof str === 'string';
-
-var isAddress = (address) => {
-  var valid = isString(address.Address1) &&
-    isString(address.City) &&
-    isString(address.State) &&
-    address.State.length == 2 &&
-    address.Zip5.match(/^\d{5}$/) &&
-    (!address.Zip4 || address.Zip4.match(/^\d{4}$/));
-  if (valid) {
-    address.State = address.State.toUpperCase();
+  _isString(str) {
+    return str && typeof str === 'string';
   }
-  return valid;
+
+  _isAddress(address) {
+    var valid = this._isString(address.Address1) &&
+      this._isString(address.City) &&
+      this._isString(address.State) &&
+      address.State.length == 2 &&
+      address.Zip5.match(/^\d{5}$/) &&
+      (!address.Zip4 || address.Zip4.match(/^\d{4}$/));
+    if (valid) {
+      address.State = address.State.toUpperCase();
+    }
+    return valid;
+  }
 }
 
 module.exports = TaxCloud;
