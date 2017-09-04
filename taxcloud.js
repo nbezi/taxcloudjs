@@ -4,7 +4,7 @@ const apiUrl = 'https://api.taxcloud.net/1.0/TaxCloud/';
 
 class TaxCloud {
 
-  constructor(props) {
+  constructor(props = {}) {
     this.apiLoginId = props.apiLoginId || process.env.TAXCLOUD_LOGIN_ID;
     this.apiKey = props.apiKey || process.env.TAXCLOUD_KEY;
     this.USPSUserId = props.USPSUserId || process.env.TAXCLOUD_USPS_USER_ID;
