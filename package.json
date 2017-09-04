@@ -1,6 +1,6 @@
 {
   "name": "taxcloudjs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TaxCloud Wrapper",
   "main": "taxcloud.js",
   "engines": {
